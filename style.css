@@ -9,6 +9,57 @@
 }
 
 * { box-sizing: border-box; }
+
+/* Subtle scrollbar – low contrast, dark track */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) rgba(255,255,255,0.04);
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.04);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.14);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.24);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+#pickerView,
+.stackScroller,
+.panelBody,
+.lessonBody {
+  scrollbar-gutter: stable;
+}
+#pickerView::-webkit-scrollbar,
+.stackScroller::-webkit-scrollbar,
+.panelBody::-webkit-scrollbar,
+.lessonBody::-webkit-scrollbar { width: 6px; }
+#pickerView::-webkit-scrollbar-track,
+.stackScroller::-webkit-scrollbar-track,
+.panelBody::-webkit-scrollbar-track,
+.lessonBody::-webkit-scrollbar-track { background: transparent; }
+#pickerView::-webkit-scrollbar-thumb,
+.stackScroller::-webkit-scrollbar-thumb,
+.panelBody::-webkit-scrollbar-thumb,
+.lessonBody::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 999px;
+}
+#pickerView:hover::-webkit-scrollbar-thumb,
+.stackScroller:hover::-webkit-scrollbar-thumb,
+.panelBody:hover::-webkit-scrollbar-thumb,
+.lessonBody:hover::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.22);
+}
+
 html, body { height: 100%; }
 body {
   margin: 0;
@@ -33,9 +84,15 @@ body {
   max-width: 1040px;
   margin: 0 auto;
   padding: calc(14px + env(safe-area-inset-top)) 14px calc(14px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.appHeader { padding: 6px 4px 14px; }
+.appHeader {
+  flex-shrink: 0;
+  padding: 6px 4px 14px;
+}
 .appHeader h1 {
   margin: 0;
   font-size: clamp(24px, 3.8vw, 38px);
@@ -46,12 +103,19 @@ body {
 }
 .appHeader p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
 
-.view { height: calc(100% - 86px); }
+.view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 .hidden { display: none !important; }
 
 #pickerView {
   overflow-y: auto;
-  padding-right: 2px;
+  overflow-x: hidden;
+  padding: 0 2px calc(20px + env(safe-area-inset-bottom)) 0;
 }
 
 .pickerGrid {
@@ -87,6 +151,7 @@ body {
 .pickerTitle { margin-top: 7px; font-size: 17px; font-weight: 600; line-height: 1.2; }
 
 .stackTopbar {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -116,8 +181,10 @@ body {
 }
 
 .stackScroller {
-  height: calc(100% - 44px);
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
   border-radius: 16px;
@@ -125,11 +192,11 @@ body {
 
 .lessonPage {
   scroll-snap-align: start;
-  height: 100svh;
   height: 100dvh;
+  height: 100svh;
   display: grid;
   place-items: center;
-  padding: 12px 4px 70px;
+  padding: 12px 4px calc(80px + env(safe-area-inset-bottom));
 }
 
 .lessonCard {
@@ -170,14 +237,17 @@ body {
   position: fixed;
   inset: 0;
   z-index: 20;
+  isolation: isolate;
 }
 .panelScrim {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background: rgba(2, 6, 10, 0.62);
 }
 .panelCard {
   position: absolute;
+  z-index: 1;
   right: max(12px, env(safe-area-inset-right));
   left: max(12px, env(safe-area-inset-left));
   bottom: max(12px, env(safe-area-inset-bottom));
@@ -188,15 +258,22 @@ body {
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .panelHead {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
 }
 .panelTitle { font-size: 18px; font-weight: 600; }
-.panelTabs { display: flex; gap: 8px; padding: 0 12px 10px; }
+.panelTabs {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  padding: 0 12px 10px;
+}
 .tabBtn {
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -214,8 +291,11 @@ body {
 .panelTabs.accent-blue .tabBtn.active { border-color: #7db9f5; color: #7db9f5; }
 .panelTabs.accent-purple .tabBtn.active { border-color: #bf9cfa; color: #bf9cfa; }
 .panelBody {
-  overflow: auto;
-  padding: 0 14px 16px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 14px calc(24px + env(safe-area-inset-bottom));
   color: var(--muted);
   line-height: 1.56;
   font-size: 15px;
