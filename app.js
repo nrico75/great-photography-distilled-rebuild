@@ -90,6 +90,7 @@
 
   function renderPicker(){
     state.view = "picker";
+    document.body.classList.remove("lessonView");
     pickerView.classList.remove("hidden");
     stackView.classList.add("hidden");
     closePanel();
@@ -100,15 +101,21 @@
     });
 
     pickerView.innerHTML = `<div class="pickerGrid">${
-      cards.map(({ block, card }, i) => `
+      cards.map(({ block, card }, i) => {
+        const intro = (card.lessons && card.lessons[0] && card.lessons[0].body)
+          ? String(card.lessons[0].body).replace(/\n+/g, " ").trim()
+          : "";
+        return `
         <button class="pickerCard ${accentClassFor(block)}" data-index="${i}" type="button">
           <img loading="lazy" decoding="async" src="${esc(card.coverImage || DUMMY_IMAGE)}" alt="${esc(card.title)}">
           <div class="pickerCardBody">
             <div class="pickerEyebrow">${esc(block.eyebrow || block.title)}</div>
             <div class="pickerTitle">${esc(card.title)}</div>
+            ${intro ? `<p class="pickerIntro">${esc(intro)}</p>` : ""}
           </div>
         </button>
-      `).join("")
+      `;
+      }).join("")
     }</div>`;
 
     pickerView.querySelectorAll(".pickerCard").forEach((el) => {
@@ -127,6 +134,7 @@
     state.currentLessonIndex = 0;
     state.currentAccent = (block && block.accent) ? String(block.accent).toLowerCase() : "orange";
 
+    document.body.classList.add("lessonView");
     pickerView.classList.add("hidden");
     stackView.classList.remove("hidden");
     applyAccent(stackView, block);

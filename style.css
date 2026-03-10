@@ -124,6 +124,13 @@ body {
   gap: 12px;
 }
 
+@media (min-width: 700px) {
+  .pickerGrid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+
 .pickerCard {
   border: 1px solid color-mix(in srgb, var(--accent, #7cf0da) 40%, transparent);
   background: linear-gradient(180deg, rgba(20, 34, 45, 0.9), rgba(14, 24, 32, 0.9));
@@ -147,8 +154,24 @@ body {
 }
 .pickerCard img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
 .pickerCardBody { padding: 13px 13px 14px; }
-.pickerEyebrow { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent, #93d8ca); }
-.pickerTitle { margin-top: 7px; font-size: 17px; font-weight: 600; line-height: 1.2; }
+.pickerEyebrow {
+  font-size: 8px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent, #93d8ca) 75%, var(--muted));
+  margin-bottom: 2px;
+}
+.pickerTitle { margin-top: 2px; font-size: 17px; font-weight: 700; line-height: 1.2; }
+.pickerIntro {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--muted) 80%, var(--bg));
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .stackTopbar {
   flex-shrink: 0;
@@ -311,6 +334,67 @@ body {
 .accent-green { --accent: #72dfc7; }
 .accent-blue { --accent: #7db9f5; }
 .accent-purple { --accent: #bf9cfa; }
+
+/* Mobile: compact top, viewport-aware lesson, CTA priority */
+@media (max-width: 600px) {
+  .appHeader {
+    padding: 4px 4px 8px;
+  }
+  .appHeader h1 {
+    font-size: 22px;
+  }
+  .appHeader p {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  /* Lesson view: hide hero header for max space */
+  .lessonView .appHeader {
+    padding: 2px 4px 4px;
+  }
+  .lessonView .appHeader h1 {
+    font-size: 16px;
+  }
+  .lessonView .appHeader p {
+    display: none;
+  }
+  .stackTopbar {
+    margin-bottom: 4px;
+  }
+  .stackTopbar .uiBtn {
+    padding: 6px 10px;
+    min-height: 36px;
+  }
+  .lessonIndicator {
+    min-width: 72px;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  .stackTitle {
+    font-size: 11px;
+  }
+  /* Lesson page: dvh for viewport, card fits in visible area */
+  .lessonPage {
+    min-height: 100dvh;
+    height: 100dvh;
+    padding: 6px 4px calc(60px + env(safe-area-inset-bottom));
+  }
+  /* Lesson card: fit in visible area (dvh minus top chrome), smaller image = CTA visible */
+  .lessonCard {
+    height: min(100%, calc(100dvh - 100px));
+  }
+  .lessonView .lessonCard {
+    height: min(100%, calc(100dvh - 85px));
+  }
+  .lessonImage {
+    aspect-ratio: 16 / 9;
+  }
+  .lessonBody {
+    padding: 12px 12px 14px;
+  }
+  .lessonTitle {
+    font-size: 20px;
+  }
+}
 
 @media (min-width: 900px) {
   .panelCard {
